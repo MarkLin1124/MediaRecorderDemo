@@ -18,7 +18,7 @@ public class MediaRecorderManager {
     private Context context;
 
     private String recorderPath = "";
-    private boolean isPlaying = false;
+    private boolean isRecording = false;
 
     public MediaRecorderManager(Context context) {
         this.context = context;
@@ -30,8 +30,8 @@ public class MediaRecorderManager {
         }
 
         mediaRecorder = new MediaRecorder();
-        File file = new File(context.getCacheDir(), Long.toString(System.currentTimeMillis()));
-        recorderPath = file.getAbsolutePath() + ".mp3";
+        File file = new File(context.getCacheDir(), Long.toString(System.currentTimeMillis()) + ".mp3");
+        recorderPath = file.getAbsolutePath();
 
         Log.d(TAG, "file path: " + file.getAbsolutePath());
 
@@ -43,7 +43,7 @@ public class MediaRecorderManager {
         try {
             mediaRecorder.prepare();
             mediaRecorder.start();
-            isPlaying = true;
+            isRecording = true;
             Log.d(TAG, "startRecord");
         } catch (IOException e) {
             e.printStackTrace();
@@ -58,7 +58,7 @@ public class MediaRecorderManager {
         Log.d(TAG, "stopRecord");
         mediaRecorder.stop();
         mediaRecorder.release();
-        isPlaying = false;
+        isRecording = false;
     }
 
     public void resetFile() {
@@ -71,7 +71,7 @@ public class MediaRecorderManager {
         return recorderPath;
     }
 
-    public boolean getIsPlaying() {
-        return isPlaying;
+    public boolean isRecording() {
+        return isRecording;
     }
 }

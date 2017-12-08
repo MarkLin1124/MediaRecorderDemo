@@ -9,11 +9,13 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mark.mediarecorderdemo.Manager.MediaPlayerManager;
 import com.mark.mediarecorderdemo.Manager.MediaRecorderManager;
 import com.mark.mediarecorderdemo.R;
 
@@ -38,9 +40,10 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     public static final int RESET_RECORD = 2;
 
     private MediaRecorderManager mediaRecorderManager;
+    private MediaPlayerManager mediaPlayerManager;
 
-    private TextView tvRecordPath, tvRecordTime;
-    private Button btnStart, btnStop, btnReset;
+    private TextView tvRecordPath, tvRecordTime, tvMediaTime;
+    private Button btnStart, btnStop, btnReset, btnPlay, btnPause, btnRelay;
 
     private ProgressDialog dialog;
 
@@ -77,7 +80,17 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         setContentView(R.layout.activity_main);
 
         initView();
-        mediaRecorderManager = new MediaRecorderManager(MainActivity.this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mediaRecorderManager == null) {
+            mediaRecorderManager = new MediaRecorderManager(MainActivity.this);
+        }
+        if (mediaPlayerManager == null) {
+            mediaPlayerManager = new MediaPlayerManager(MainActivity.this);
+        }
     }
 
     @Override
@@ -88,20 +101,36 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
         switch (v.getId()) {
             case R.id.btn_start:
-                if (!mediaRecorderManager.getIsPlaying()) {
+                if (!mediaRecorderManager.isRecording()) {
                     dialog.show();
                     mHandler.post(startRecord);
                 }
                 break;
             case R.id.btn_stop:
-                if (mediaRecorderManager.getIsPlaying()) {
+                if (mediaRecorderManager.isRecording()) {
                     dialog.show();
                     mHandler.post(stopRecord);
                 }
                 break;
             case R.id.btn_reset:
-                if (!mediaRecorderManager.getIsPlaying()) {
+                if (!mediaRecorderManager.isRecording()) {
                     mHandler.post(resetRecord);
+                }
+                break;
+            case R.id.btn_play:
+                if (!TextUtils.isEmpty(mediaRecorderManager.getRecorderPath()) && !mediaPlayerManager.getMediaPlayer().isPlaying()) {
+                    mediaPlayerManager.setPath(mediaRecorderManager.getRecorderPath());
+                    mediaPlayerManager.play();
+                }
+                break;
+            case R.id.btn_pause:
+                if (mediaPlayerManager.getMediaPlayer().isPlaying()) {
+                    mediaPlayerManager.pause();
+                }
+                break;
+            case R.id.btn_replay:
+                if (!mediaPlayerManager.getMediaPlayer().isPlaying()) {
+                    mediaPlayerManager.reset();
                 }
                 break;
         }
@@ -118,9 +147,16 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         btnStop.setOnClickListener(this);
         btnReset = (Button) findViewById(R.id.btn_reset);
         btnReset.setOnClickListener(this);
+        btnPlay = (Button) findViewById(R.id.btn_play);
+        btnPlay.setOnClickListener(this);
+        btnPause = (Button) findViewById(R.id.btn_pause);
+        btnPause.setOnClickListener(this);
+        btnRelay = (Button) findViewById(R.id.btn_replay);
+        btnRelay.setOnClickListener(this);
 
         tvRecordPath = (TextView) findViewById(R.id.tv_record_path);
         tvRecordTime = (TextView) findViewById(R.id.tv_continue_time);
+        tvMediaTime = (TextView) findViewById(R.id.tv_media_time);
     }
 
     private boolean checkPermission() {
