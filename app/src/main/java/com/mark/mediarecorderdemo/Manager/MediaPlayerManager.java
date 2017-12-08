@@ -2,11 +2,7 @@ package com.mark.mediarecorderdemo.Manager;
 
 import android.content.Context;
 import android.media.MediaPlayer;
-import android.text.TextUtils;
 import android.util.Log;
-import android.widget.Toast;
-
-import com.mark.mediarecorderdemo.Activity.MainActivity;
 
 import java.io.IOException;
 
@@ -64,11 +60,15 @@ public class MediaPlayerManager implements MediaPlayer.OnPreparedListener, Media
     @Override
     public void onCompletion(MediaPlayer mp) {
         mp.reset();
+
+        Log.d(TAG, "finish play");
     }
 
     @Override
     public void onPrepared(MediaPlayer mp) {
         mp.start();
+
+        Log.d(TAG, "start play");
     }
 
     public MediaPlayer getMediaPlayer() {

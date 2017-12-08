@@ -2,9 +2,11 @@ package com.mark.mediarecorderdemo.Manager;
 
 import android.content.Context;
 import android.media.MediaRecorder;
+import android.os.Environment;
 import android.util.Log;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 /**
@@ -30,10 +32,10 @@ public class MediaRecorderManager {
         }
 
         mediaRecorder = new MediaRecorder();
-        File file = new File(context.getCacheDir(), Long.toString(System.currentTimeMillis()) + ".mp3");
+        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), Long.toString(System.currentTimeMillis()) + ".mp3");
         recorderPath = file.getAbsolutePath();
 
-        Log.d(TAG, "file path: " + file.getAbsolutePath());
+        Log.d(TAG, "file path: " + recorderPath);
 
         mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
