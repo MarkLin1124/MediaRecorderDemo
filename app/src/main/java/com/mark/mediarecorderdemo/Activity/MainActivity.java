@@ -122,6 +122,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 if (!TextUtils.isEmpty(mediaRecorderManager.getRecorderPath()) && !mediaPlayerManager.getMediaPlayer().isPlaying()) {
                     mediaPlayerManager.setPath(mediaRecorderManager.getRecorderPath());
                     mediaPlayerManager.play();
+                    tvMediaTime.setText(Integer.toString(mediaPlayerManager.getMediaPlayer().getDuration()));
                 }
                 break;
             case R.id.btn_pause:

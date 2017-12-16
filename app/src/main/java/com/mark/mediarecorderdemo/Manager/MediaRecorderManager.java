@@ -32,7 +32,7 @@ public class MediaRecorderManager {
         }
 
         mediaRecorder = new MediaRecorder();
-        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), Long.toString(System.currentTimeMillis()) + ".mp3");
+        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), Long.toString(System.currentTimeMillis()) + ".aac");
         recorderPath = file.getAbsolutePath();
 
         Log.d(TAG, "file path: " + recorderPath);

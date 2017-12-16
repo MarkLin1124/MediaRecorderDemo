@@ -41,7 +41,6 @@ public class MediaPlayerManager implements MediaPlayer.OnPreparedListener, Media
                 mediaPlayer.prepare();
             } catch (IOException e) {
                 e.printStackTrace();
-                Log.e(TAG, "Media not found, IO Exception");
             }
         }
     }
